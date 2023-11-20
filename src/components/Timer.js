@@ -5,8 +5,7 @@ function Timer({name, length, resetButton, switchTimer}) {
     let playing = false;
 
     const playButton = () => {
-        !playing ? passTime : 
-        passTime()
+
     }
 
     var timer = length*60, minutes, seconds;
