@@ -18,7 +18,7 @@ function Timer({name, length, isPlaying, playButtonHandler, resetButton}) {
                 } else console.log(`Only $1 left`, timeLeft);
             }, 1000)
         } else clearInterval(timer);
-    }
+    } 
 
     return (
         <div id="timer">
