@@ -6,30 +6,34 @@ import Timer from './Timer';
 function Pomodoro() {
   const [breakLength, setBreakLength] = useState(5);
   const [sessionLength, setSessionLength] = useState(25);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const lengthHandler = (obj) => {
     if(obj.type === 'break') {
-      if(breakLength > 0 && breakLength <= 60) setBreakLength(prevLength => obj.op(prevLength)) 
+      let futureBreakLength = obj.op(breakLength)
+      if(futureBreakLength > 0 && futureBreakLength <= 60) setBreakLength(futureBreakLength) 
     } else {
-      if (sessionLength > 0 && sessionLength < 60)  setSessionLength(prevLength => obj.op(prevLength))
+      let futureSessionLength = obj.op(sessionLength)
+      if (futureSessionLength > 0 && futureSessionLength <= 60)  setSessionLength(futureSessionLength)
     }
   }
   
 
   const playButtonHandler = () => {
-    console.log("Play")
+    setIsPlaying(prevState => !prevState);
   }
 
   const resetHandler = () => {
     setBreakLength(5)
-    setSessionLength(5)
+    setSessionLength(25)
+    setIsPlaying(false);
   }
   
   return (
     <div className="Page">
       <Modifier name="break" length={breakLength} handleLength={lengthHandler} />
       <Modifier name="session" length={sessionLength} handleLength={lengthHandler} />
-      <Timer name="Session" length={sessionLength} resetButton={resetHandler} switchTimer={playButtonHandler}/>
+      <Timer name="Session" length={sessionLength} isPlaying={isPlaying} playButtonHandler={playButtonHandler} resetButton={resetHandler} />
     </div>
   );
 }

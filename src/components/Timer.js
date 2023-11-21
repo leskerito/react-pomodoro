@@ -1,30 +1,23 @@
 import React from 'react'
 
-function Timer({name, length, resetButton, switchTimer}) {
+function Timer({name, length, isPlaying, playButtonHandler, resetButton}) {
 
-    let playing = false;
+    let timeLeft = length;
+    var timer;
+
+    console.log(isPlaying)
 
     const playButton = () => {
-
-    }
-
-    var timer = length*60, minutes, seconds;
-
-    const passTime = () => {
-        setInterval(function () {
-            minutes = parseInt(timer/60);
-            seconds = parseInt(timer%60)
-
-            minutes = minutes < 10 ? "0" + minutes : minutes;
-            seconds = seconds < 10 ? "0" + seconds : seconds;
-
-            console.log(minutes + ':' + seconds);
-            
-            if (--timer < 0) {
-                switchTimer()
-                timer = 0
-            }
-        }, 1000)
+        if(isPlaying){
+            console.log("playing.")
+            timer = setInterval(() => {
+                timeLeft--;
+                if(timeLeft === 0){
+                    console.log("Done!")
+                    clearInterval(timer)
+                } else console.log(`Only $1 left`, timeLeft);
+            }, 1000)
+        } else clearInterval(timer);
     }
 
     return (
@@ -34,11 +27,11 @@ function Timer({name, length, resetButton, switchTimer}) {
             </div>
             <div id="time-left">
                 {
-                    length
+                    timeLeft
                 }
             </div>
-            <button id="start_stop" onClick={playButton}></button>
-            <button id="reset" onClick={resetButton}></button>
+            <button id="start_stop" onClick={playButton}>Play/Pause</button>
+            <button id="reset" onClick={resetButton}>Reset</button>
         </div>
     )
 }
