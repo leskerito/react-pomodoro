@@ -1,46 +1,68 @@
-import React from 'react'
+import {useState, React} from 'react'
 
-function Timer({name, length, resetButtonHandler, hasStarted}) {
+function Timer({name, length, playButtonHandler, resetButtonHandler, hasStarted, isPlaying}) {
 
-    var timeLeft = length;
-    var started = hasStarted;
-    var timer;
+    const [started, setStarted] = useState(hasStarted === undefined ? false : hasStarted);
+    const [timer, setTimer] = useState(undefined);
 
-    let isPlaying = false;
+    var timeLeft = length*60;
+    var minutes;
+    var seconds;
 
     const start = () => {
-        started = true;
-        isPlaying = true;
-        timer = setInterval(() => {
-            if(timeLeft === 0){ 
-                console.log("All Done!")
-                clearInterval(timer);
-            }
-            timeLeft -= 1;
-            console.log(timeLeft)
-        }, 1000);
+        setStarted(true);
+        playButtonHandler();
+        setTimer(setInterval(function () {
+                minutes = parseInt(timeLeft / 60, 10);
+                seconds = parseInt(timeLeft % 60, 10);
+        
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+        
+                document.getElementById('time-left').textContent = minutes + ":" + seconds;
+        
+                if (--timeLeft < 0) {
+                    timeLeft = length;
+                    clearInterval(timer);
+                }
+            }, 1000));
     }
 
 
 
     const playButton = () => {
-        isPlaying = !isPlaying;
-        if(!started) start();
-        else {
+        playButtonHandler();
+        console.log("isPlaying playButton", isPlaying)
+        if(!started){
+            start();
+        } else {
             if(isPlaying){
-                timer = setInterval(() => {
-                    timeLeft -= 1;
-                    console.log(timeLeft)
-                    if(timeLeft === 0) clearInterval(timer);
-                }, 1000)
+                console.log("Timer on isPlaying:playButton")
+                setTimer(setInterval(function () {
+                    console.log("Timer playing playButton\n");
+                    minutes = parseInt(timeLeft / 60, 10);
+                    seconds = parseInt(timeLeft % 60, 10);
+            
+                    minutes = minutes < 10 ? "0" + minutes : minutes;
+                    seconds = seconds < 10 ? "0" + seconds : seconds;
+            
+                    document.getElementById('time-left').textContent = minutes + ":" + seconds;
+            
+                    if (--timeLeft < 0) {
+                        timeLeft = length;
+                        clearInterval(timer);
+                    }
+                }, 1000));
             } else clearInterval(timer);
         }
     }
 
     const resetButton = () => {
         resetButtonHandler();
-        isPlaying = false;
         clearInterval(timer);
+        setStarted(false);
+        isPlaying = false;
+        timeLeft = length;
     }
 
     return (
@@ -49,7 +71,7 @@ function Timer({name, length, resetButtonHandler, hasStarted}) {
                 {name}
             </div>
             <div id="time-left">
-                { timeLeft }
+                { length >= 10 ? length + ":00" : "0" + length + ":00" }
             </div>
             <button id="start_stop" onClick={playButton}>Play/Pause</button>
             <button id="reset" onClick={resetButton}>Reset</button>
