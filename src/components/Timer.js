@@ -1,25 +1,46 @@
-import {useState, React} from 'react'
+import React from 'react'
 
-function Timer({name, length, resetButtonHandler}) {
+function Timer({name, length, resetButtonHandler, hasStarted}) {
 
-    const [timeLeft, setTimeLeft] = useState(length);
+    var timeLeft = length;
+    var started = hasStarted;
+    var timer;
 
     let isPlaying = false;
 
+    const start = () => {
+        started = true;
+        isPlaying = true;
+        timer = setInterval(() => {
+            if(timeLeft === 0){ 
+                console.log("All Done!")
+                clearInterval(timer);
+            }
+            timeLeft -= 1;
+            console.log(timeLeft)
+        }, 1000);
+    }
+
+
+
     const playButton = () => {
         isPlaying = !isPlaying;
-        if(isPlaying){
-            var timer = setInterval(() => {
-                setTimeLeft(prevState => prevState-1);
-                if(timeLeft === 0) clearInterval(timer);
-            }, 1000)
-        } else clearInterval(timer);
+        if(!started) start();
+        else {
+            if(isPlaying){
+                timer = setInterval(() => {
+                    timeLeft -= 1;
+                    console.log(timeLeft)
+                    if(timeLeft === 0) clearInterval(timer);
+                }, 1000)
+            } else clearInterval(timer);
+        }
     }
 
     const resetButton = () => {
         resetButtonHandler();
         isPlaying = false;
-        setTimeLeft(length);
+        clearInterval(timer);
     }
 
     return (
@@ -28,7 +49,7 @@ function Timer({name, length, resetButtonHandler}) {
                 {name}
             </div>
             <div id="time-left">
-                {         timeLeft       }
+                { timeLeft }
             </div>
             <button id="start_stop" onClick={playButton}>Play/Pause</button>
             <button id="reset" onClick={resetButton}>Reset</button>
