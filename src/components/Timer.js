@@ -1,23 +1,25 @@
-import React from 'react'
+import {useState, React} from 'react'
 
-function Timer({name, length, isPlaying, playButtonHandler, resetButton}) {
+function Timer({name, length, resetButtonHandler}) {
 
-    let timeLeft = length;
-    var timer;
+    const [timeLeft, setTimeLeft] = useState(length);
 
-    console.log(isPlaying)
+    let isPlaying = false;
 
     const playButton = () => {
+        isPlaying = !isPlaying;
         if(isPlaying){
-            console.log("playing.")
-            timer = setInterval(() => {
-                timeLeft--;
-                if(timeLeft === 0){
-                    console.log("Done!")
-                    clearInterval(timer)
-                } else console.log(`Only $1 left`, timeLeft);
+            var timer = setInterval(() => {
+                setTimeLeft(prevState => prevState-1);
+                if(timeLeft === 0) clearInterval(timer);
             }, 1000)
         } else clearInterval(timer);
+    }
+
+    const resetButton = () => {
+        resetButtonHandler();
+        isPlaying = false;
+        setTimeLeft(length);
     }
 
     return (
@@ -26,9 +28,7 @@ function Timer({name, length, isPlaying, playButtonHandler, resetButton}) {
                 {name}
             </div>
             <div id="time-left">
-                {
-                    timeLeft
-                }
+                {         timeLeft       }
             </div>
             <button id="start_stop" onClick={playButton}>Play/Pause</button>
             <button id="reset" onClick={resetButton}>Reset</button>
