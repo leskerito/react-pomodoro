@@ -4,8 +4,8 @@ import Modifier from './Modifier';
 import Timer from './Timer';
 
 function Pomodoro() {
-  const [breakLength, setBreakLength] = useState(1);
-  const [sessionLength, setSessionLength] = useState(1);
+  const [breakLength, setBreakLength] = useState(5);
+  const [sessionLength, setSessionLength] = useState(25);
   const [isPlaying, setIsPlaying] = useState(false);
 
   const lengthHandler = (obj) => {
