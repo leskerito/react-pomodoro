@@ -4,7 +4,7 @@ import Modifier from './Modifier';
 import Timer from './Timer';
 
 function Pomodoro() {
-  const [breakLength, setBreakLength] = useState(5);
+  const [breakLength, setBreakLength] = useState(1);
   const [sessionLength, setSessionLength] = useState(1);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -20,8 +20,7 @@ function Pomodoro() {
   }
 
   const playButtonHandler = () => {
-    setIsPlaying(prevState => !prevState);
-    console.log(isPlaying, "buttonHandler\n")
+    setIsPlaying(true);
   }
   
   const resetButtonHandler = () => {
