@@ -22,15 +22,7 @@ function Timer({
 
   //Function updating timeLeft and what's showing in the DOM
   function updateTimer(ref) {
-
     ref.current -= 1;
-
-    if(ref.current === 0){
-      switchTimer();
-      clearInterval(intervalRef);
-      resetClock();
-      return;
-    }
 
     let minutes = String(Math.floor(parseInt(ref.current / 60))).padStart(
       2,
@@ -42,9 +34,17 @@ function Timer({
     );
     let format = minutes + ":" + seconds;
 
-    document.getElementById("time-left").textContent = format
-    
+    if(ref.current === 0){
+      document.getElementById('beep').play();
+    }
 
+    if(ref.current < 0){
+      clearInterval(intervalRef);
+      switchTimer();
+      return;
+    }
+
+    document.getElementById("time-left").innerHTML = format
     if (ref.current < 4) {
       console.log(
         name === "session"
@@ -54,6 +54,7 @@ function Timer({
     }
   }
 
+  //Function starting the timer for the first time 
   function start() {
     playing.current = true;
     started.current = true;
@@ -69,7 +70,11 @@ function Timer({
   function playPause() {
     if (!started.current) {
       playButtonHandler();
-      start();
+      playing.current = true;
+      started.current = true;
+  
+      resetClock();
+      timeLeft.current = length * 60;
       return;
     }
 
@@ -108,6 +113,7 @@ function Timer({
       <button id="reset" onClick={reset}>
         Reset
       </button>
+      <audio id="beep" style={{'display': 'none'}} />
     </div>
   );
 }
