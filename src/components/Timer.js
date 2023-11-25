@@ -17,6 +17,11 @@ function Timer({
   //Function allowing the Clock to reset its display whenever it needs to
   const resetClock = () => { document.getElementById("time-left").textContent = length > 10 ? length + ":00" : "0" + length + ":00"; }
 
+  function stop(audio){
+    audio.pause();
+    audio.currentTime = 0;
+  }
+
   //Starts the timer if it is rendered as an immediate start
   if (isPlaying) start();
 
@@ -98,6 +103,7 @@ function Timer({
     timeLeft.current = length * 60;
     playing.current = false;
     started.current = false;
+    stop(document.getElementById('beep'));
     resetClock();
   }
 
@@ -113,7 +119,7 @@ function Timer({
       <button id="reset" onClick={reset}>
         Reset
       </button>
-      <audio id="beep" style={{'display': 'none'}} />
+      <audio id="beep" src={process.env.PUBLIC_URL + '/beepsound.mp3'} style={{'display': 'none'}} />
     </div>
   );
 }
