@@ -50,12 +50,13 @@ function Timer({
     }
 
     document.getElementById("time-left").innerHTML = format
+    document.title = name + " - " + format
+
     if (ref.current < 4) {
-      console.log(
-        name === "session"
-          ? `Entering break in ${ref.current}`
-          : `Resuming session in ${ref.current}`
-      );
+      let log = name === "session"
+      ? `Entering break in ${ref.current}`
+      : `Resuming session in ${ref.current}`
+      document.title = log
     }
   }
 
@@ -103,6 +104,7 @@ function Timer({
     timeLeft.current = length * 60;
     playing.current = false;
     started.current = false;
+    document.title = "Pomodoro Clock"
     stop(document.getElementById('beep'));
     resetClock();
   }

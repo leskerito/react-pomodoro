@@ -38,7 +38,7 @@ function Pomodoro() {
   };
 
   return (
-    <div className="Page">
+    <div className="text-center m-0 p-4">
       <Modifier
         name="break"
         length={length.break}
